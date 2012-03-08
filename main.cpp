@@ -31,6 +31,10 @@ void help()
  */
 Mat transform(Mat& img){
    cout << "Performing the transforms..." << endl;
+
+   //Put transforms after this line in this function.
+   //
+   //Right now just simple transpose
    return img.t();
 }
 
@@ -49,10 +53,9 @@ int main(int argc, char** argv)
     transformed = cv::imread("smile", CV_LOAD_IMAGE_COLOR);
     
     cv::namedWindow("original");
-    cv::namedWindow("tranformed");
+    cv::namedWindow("transformed");
     cv::imshow("original", original);
-
-
+    cv::imshow("transformed", transformed);
 
     while (true){
         int key=cv::waitKey();
