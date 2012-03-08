@@ -9,6 +9,9 @@
 using namespace cv;
 using namespace std;
 
+//The original image, and the image after the transform
+Mat original, transformed;
+
 void help()
 {
 	cout <<
@@ -23,15 +26,45 @@ void help()
 }
 
 
+/*
+ * Put in here whatever image transformations you want
+ */
+Mat transform(Mat& img){
+   cout << "Performing the transforms..." << endl;
+   return img.t();
+}
+
+void update_transformed(){
+    transformed = transform(transformed);
+
+    cout << "Showing the transform..." << endl;
+    cv::imshow("transformed", transformed);
+}
+    
 
 int main(int argc, char** argv)
 {
     cout << "Showing image..." << endl;
-    Mat image = cv::imread("star_wars_photo", CV_LOAD_IMAGE_COLOR);
-    cv::namedWindow("image");
-    cv::imshow("image", image);
+    original = cv::imread("smile", CV_LOAD_IMAGE_COLOR);
+    transformed = cv::imread("smile", CV_LOAD_IMAGE_COLOR);
+    
+    cv::namedWindow("original");
+    cv::namedWindow("tranformed");
+    cv::imshow("original", original);
 
-    cout << "Image displaying." << endl;
+
+
+    while (true){
+        int key=cv::waitKey();
+        if (key == 'q'){
+            cv::destroyWindow("original");
+            cv::destroyWindow("transformed");
+        } else if(key == 't'){
+            update_transformed();
+        }
+    }
+    
+    cout << "Images displaying." << endl;
     return 0;
 }
 
