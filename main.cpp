@@ -25,21 +25,41 @@ void help()
     "Using OpenCV version %s\n" << CV_VERSION << "\n" << endl;
 }
 
+/*
+ * Return a blurred copy of the image
+ */
+Mat img_blurred(Mat& src){
+    Mat blurred;
+    //cv::GaussianBlur(src, blurred, Size(10,10), 1.0, 1.0);
+    cv::blur(src, blurred, Size(20,20));
+    return blurred;
+}
+
+Mat img_transposed(Mat& src){
+    return src.t();
+}
 
 /*
  * Put in here whatever image transformations you want
  */
-Mat transform(Mat& img){
+Mat transform(Mat& img, char command){
    cout << "Performing the transforms..." << endl;
 
-   //Put transforms after this line in this function.
-   //
-   //Right now just simple transpose
-   return img.t();
+   switch(command){
+       case 't': return img_transposed(img);
+                 break;;
+       case 'b': return img_blurred(img);
+                 break;;
+
+       case 'r': return original; 
+                 break;;
+       
+       default: return transformed; 
+                break;;
+    }
 }
 
 void update_transformed(){
-    transformed = transform(transformed);
 
     cout << "Showing the transform..." << endl;
     cv::imshow("transformed", transformed);
@@ -50,7 +70,7 @@ int main(int argc, char** argv)
 {
     cout << "Showing image..." << endl;
     original = cv::imread("smile", CV_LOAD_IMAGE_COLOR);
-    transformed = cv::imread("smile", CV_LOAD_IMAGE_COLOR);
+    transformed = Mat(original);//= cv::imread("smile", CV_LOAD_IMAGE_COLOR);
     
     cv::namedWindow("original");
     cv::namedWindow("transformed");
@@ -62,9 +82,11 @@ int main(int argc, char** argv)
         if (key == 'q'){
             cv::destroyWindow("original");
             cv::destroyWindow("transformed");
-        } else if(key == 't'){
-            update_transformed();
+        } else{
+            transformed = transform(transformed, key);
         }
+
+        update_transformed();
     }
     
     cout << "Images displaying." << endl;
